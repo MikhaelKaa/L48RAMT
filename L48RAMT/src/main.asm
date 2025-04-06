@@ -99,6 +99,9 @@ result:
 adr:
     DW MT_START_ADR
 
+
+    ORG 0x4800
+    INCBIN "logo.scr", 0x800, 0x1000 ; include 0x400 bytes from offset 0x200
 end:
     ; Выводим размер банарника.
     display "l48ramt code size: ", /d, end - start
