@@ -28,3 +28,7 @@ make init (утановит sjasmplus)
 make build
 
 собранный tap файл будет находится в ./M48RAMT/build/
+
+# Запуск в Fuse
+
+![Fuse](./media/fuse.png)
