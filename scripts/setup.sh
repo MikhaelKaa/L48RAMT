@@ -15,3 +15,14 @@ else
    sudo make install
    cd ..
 fi
+
+# Проверяем установлен ли sjasmplus.
+TAPE2WAV=`which tape2wav` 
+if [ -n "$TAPE2WAV" ]      # Проверяем что строка не пуста.
+then
+   echo "tape2wav installed"
+else
+   echo "tape2wav not installed"
+   sudo apt-get install fuse-emulator-utils
+fi
+
