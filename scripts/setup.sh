@@ -16,7 +16,7 @@ else
    cd ..
 fi
 
-# Проверяем установлен ли sjasmplus.
+# Проверяем установлен ли tape2wav.
 TAPE2WAV=`which tape2wav` 
 if [ -n "$TAPE2WAV" ]      # Проверяем что строка не пуста.
 then
