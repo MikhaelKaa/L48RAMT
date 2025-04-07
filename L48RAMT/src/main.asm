@@ -37,9 +37,9 @@ main:
     inc a                   ; Если равно 0xff -> прибавляем 1 и получем 0x00
     ld (hl), a              ; Сохраняем переменную хранящую значение паттерна.
 .skip:
+    ld (adr), bc
 
     ; Тест
-    ld (adr), bc
     ld a, (pattern)
     ld (bc), a              ; Записываем паттерн
     ld d, a                 ; Сохраняем паттерн в D
@@ -47,30 +47,36 @@ main:
     xor d                   ; Сравниваем с оригиналом
     ld (result), a          ; Сохраняем маску ошибок
 
+; Этот блок типо тест - если адрес совпал, то result 0x55
 ;     ld bc, (adr)
-;     ld a, c         ; Загружаем байт из BC в A
-;     cp 0xff         ; Сравниваем с 0xff
+;     ld a, b         ; Загружаем байт из BC в A
+;     cp 0xfa         ; Сравниваем с 0x60
+;     jr nz, .skipt   ; Если не равно - пропускаем
+;     ld a, c         ; Загружаем байт BC в A
+;     cp 0xfa         ; Сравниваем с 0x00
 ;     jr nz, .skipt   ; Если не равно - пропускаем
 ;     ld a, 0xff
 ;     ld (result), a
 ; .skipt
+;     ld a, (result)
 
-    cp 0
-    jr z, .skip_border      ; Если равно 0 (ячейка в порядке)
-    ld a, 0b00000010        ; Бордюр красный
-    out (0xfe), a
-    ld bc, 16384
-.delay_loop                 ; Задержка
-    dec bc
-    ld a, b
-    or c
-    jr nz, .delay_loop
-    ld a, 0b00000001        ; Бордюр синий
-    out (0xfe), a
-.skip_border
+; Этот блок кода перенесен в отображение. TODO: удалить.
+;     cp 0
+;     jr z, .skip_border      ; Если равно 0 (ячейка в порядке)
+;     ld a, 0b00000010        ; Бордюр красный
+;     out (0xfe), a
+;     ld bc, 16384
+; .delay_loop                 ; Задержка
+;     dec bc
+;     ld a, b
+;     or c
+;     jr nz, .delay_loop
+;     ld a, 0b00000001        ; Бордюр синий
+;     out (0xfe), a
+; .skip_border
 
-    ; ld a, 0x55
-    ; ld (result), a
+; ld a, 0x55
+; ld (result), a
 
     ; Отображение.
     ld hl, 0x5800+32*7
@@ -85,6 +91,16 @@ main:
     jr .next
 .red_attr:
     ld (hl), %00010010      ; Красный (ячейка с сбоем)
+    ld a, 0b00000010        ; Бордюр красный
+    out (0xfe), a
+    ld de, 16384
+.delay_loop                 ; Задержка
+    dec de
+    ld a, d
+    or e
+    jr nz, .delay_loop
+    ld a, 0b00000001        ; Бордюр синий
+    out (0xfe), a
 .next:
     inc hl                  ; Следующий атрибут через один
     inc hl
@@ -101,7 +117,7 @@ adr:
 
 
     ORG 0x4800
-    INCBIN "logo.scr", 0x800, 0x1000 ; include 0x400 bytes from offset 0x200
+    INCBIN "logo.scr", 0x800, 0x1000 ; include 0x1000 bytes from offset 0x800
 end:
     ; Выводим размер банарника.
     display "l48ramt code size: ", /d, end - start
