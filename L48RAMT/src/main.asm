@@ -76,10 +76,10 @@ main:
     sla c                   ; Сдвигаем старший бит влево
     jr c, .red_attr         ; Если бит = 1 - красный
 .green_attr:
-    ld (hl), %00100100      ; Зеленый (ячейка ОК)
+    ld (hl), 0b00100100     ; Зеленый (ячейка ОК)
     jr .next
 .red_attr:
-    ld (hl), %00010010      ; Красный (ячейка с сбоем)
+    ld (hl), 0b00010010     ; Красный (ячейка с сбоем)
     ld a, 0b00000010        ; Бордюр красный
     out (0xfe), a
     ld de, 2048
@@ -103,7 +103,6 @@ result:
     DB 0x00
 adr:
     DW MT_START_ADR
-
 
     ORG 0x4800
     INCBIN "logo.scr", 0x800, 0x1000 ; include 0x1000 bytes from offset 0x800
