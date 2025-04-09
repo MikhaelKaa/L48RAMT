@@ -7,6 +7,8 @@
     ORG 0x4000
     
 MT_START_ADR EQU  0x59FF
+; MT_ATR_ADR EQU  0x5800
+MT_ATR_ADR EQU  0x5800+0x00e0
 
 start:
     di
@@ -60,31 +62,18 @@ main:
 ; .skipt
 ;     ld a, (result)
 
-; Этот блок кода перенесен в отображение. TODO: удалить.
-;     cp 0
-;     jr z, .skip_border      ; Если равно 0 (ячейка в порядке)
-;     ld a, 0b00000010        ; Бордюр красный
-;     out (0xfe), a
-;     ld bc, 16384
-; .delay_loop                 ; Задержка
-;     dec bc
-;     ld a, b
-;     or c
-;     jr nz, .delay_loop
-;     ld a, 0b00000001        ; Бордюр синий
-;     out (0xfe), a
-; .skip_border
-
+; Этот блок - тест отображения.
 ; ld a, 0x55
 ; ld (result), a
 
     ; Отображение.
-    ld hl, 0x5800+32*7
+    ld hl, MT_ATR_ADR
     ld b, 8                 ; 8 битов для обработки
     ld a, (result)
     ld c, a                 ; Сохраняем в С результат проверки ячейки
 .draw_loop:
-    sla c                   ; Сдвигаем старший бит в C
+    ; Отображение от старшего к младшему биту.
+    sla c                   ; Сдвигаем старший бит влево
     jr c, .red_attr         ; Если бит = 1 - красный
 .green_attr:
     ld (hl), %00100100      ; Зеленый (ячейка ОК)
@@ -93,7 +82,7 @@ main:
     ld (hl), %00010010      ; Красный (ячейка с сбоем)
     ld a, 0b00000010        ; Бордюр красный
     out (0xfe), a
-    ld de, 16384
+    ld de, 2048
 .delay_loop                 ; Задержка
     dec de
     ld a, d
