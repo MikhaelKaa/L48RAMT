@@ -25,11 +25,12 @@ git clone https://github.com/MikhaelKaa/L48RAMT.git
 
 Выполните в директории репозитария:
 
-sudo ./configure
+sudo ./configure (возможно потребуется сделать chmod +x configure)
 
-make init (уcтановит sjasmplus)
+make init (уcтановит sjasmplus из исходников, понадобятся тулзы для его сборки.)
 
 make build
+
 
 собранный tap файл будет находится в ./M48RAMT/build/
 
