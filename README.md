@@ -27,7 +27,7 @@ git clone https://github.com/MikhaelKaa/L48RAMT.git
 
 sudo ./configure
 
-make init (утановит sjasmplus)
+make init (уcтановит sjasmplus)
 
 make build
 
