@@ -107,7 +107,7 @@ adr:
     ORG 0x4800
     INCBIN "logo.scr", 0x800, 0x1000 ; include 0x1000 bytes from offset 0x800
 end:
-    ; Выводим размер банарника.
+    ; Выводим размер бинарника.
     display "l48ramt code size: ", /d, end - start
     display "l48ramt code start: ", /d, start
     display "l48ramt code end: ", /d, end
